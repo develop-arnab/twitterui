@@ -9,7 +9,7 @@ import PageNotFound from "./pages/PageNotFound";
 export default function App() {
   const [token, setToken] = useState("");
   const client = new ApolloClient({
-    uri: "http://localhost:8080/graphql",
+    uri: "http://3.110.105.160:8080/graphql",
     cache: new InMemoryCache()
   });
   useEffect(() => {
