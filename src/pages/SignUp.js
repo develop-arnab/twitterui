@@ -12,21 +12,37 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from 'react-router-dom'
+import axios from "axios";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
-
+const baseURL = process.env.REACT_APP_BASE_URL;
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate()
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password")
     });
-
-    
+    const body = {
+      email: data.get("email"),
+      username: data.get("username"),
+      password: data.get("password"),
+    };
+    try {
+      const response = await axios.post(baseURL + "/server/auth/register", body);
+      console.log("on Login ", response);
+      if(response?.data?.status ===  "ok"){
+        localStorage.setItem('user', response.data.refreshToken)
+        navigate('/signin')
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
 
   };
 

@@ -7,9 +7,10 @@ import SignIn from "./pages/SignIn";
 import Layout from "./pages/Layout";
 import PageNotFound from "./pages/PageNotFound";
 export default function App() {
+  const baseURL = process.env.REACT_APP_BASE_URL;
   const [token, setToken] = useState("");
   const client = new ApolloClient({
-    uri: "http://3.110.105.160:8080/graphql",
+    uri: `${baseURL}/graphql`,
     cache: new InMemoryCache()
   });
   useEffect(() => {

@@ -1,7 +1,12 @@
 import { Menu, MenuItem } from '@mui/material'
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 function MenuComp({setOpenProfile, openProfile}) {
+  const navigate = useNavigate();
+  const logoutUser = () =>{
+    localStorage.removeItem('user');
+    navigate('/signin')
+  }
   return (
     <Menu
         id="demo-positioned-menu"
@@ -18,7 +23,7 @@ function MenuComp({setOpenProfile, openProfile}) {
         }}
     >
         <MenuItem>Profile</MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={() => {logoutUser()}} >Logout</MenuItem>
     </Menu>
   )
 }

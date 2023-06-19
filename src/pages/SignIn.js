@@ -11,21 +11,21 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 const defaultTheme = createTheme();
-const baseURL = "http://3.110.105.160:8080";
-export default function SignIn({navigation}) {
-    const navigate = useNavigate()
+const baseURL = process.env.REACT_APP_BASE_URL;
+export default function SignIn({ navigation }) {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
-      password: data.get("password")
+      password: data.get("password"),
     });
     const body = {
       username: data.get("email"),
-      password: data.get("password")
+      password: data.get("password"),
     };
     // const config = {
     //     headers: { Authorization: `Bearer ${userToken}` },
@@ -33,9 +33,9 @@ export default function SignIn({navigation}) {
     try {
       const response = await axios.post(baseURL + "/server/auth/login", body);
       console.log("on Login ", response);
-      if(response?.data?.status ===  "Success"){
-        localStorage.setItem('user', response.data.refreshToken)
-        navigate('/')
+      if (response?.data?.status === "Success") {
+        localStorage.setItem("user", response.data.refreshToken);
+        navigate("/");
       }
     } catch (err) {
       console.log("err", err);
@@ -51,7 +51,7 @@ export default function SignIn({navigation}) {
             marginTop: 8,
             display: "flex",
             flexDirection: "column",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>

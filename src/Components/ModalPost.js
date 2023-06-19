@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button, Avatar, Modal, TextField, Typography, List, ListItem, ListItemAvatar, ListItemText, ButtonGroup } from '@mui/material'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
@@ -7,7 +7,8 @@ import { blue, green, yellow } from '@mui/material/colors';
 import { Box, Stack } from '@mui/system';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -23,10 +24,25 @@ const style = {
   };
 
 
-function ModalPost({open, setOpen}) {
 
-    const tweet = () => {
-        
+function ModalPost({open, setOpen}) {
+    const baseURL = process.env.REACT_APP_BASE_URL;
+    const navigate = useNavigate();
+    const[tweetPost, setTweetPost] = useState("")
+
+    const tweet = async () => {
+        const body = {
+            tweet : tweetPost,
+          };
+          try {
+            const response = await axios.post(baseURL + "/server/auth/tweet", body);
+            console.log("on Login ", response);
+            if(response?.data?.status ===  "ok"){
+              localStorage.setItem('user', response.data.refreshToken)
+            }
+          } catch (err) {
+            console.log("err", err);
+          }
     }
   
   return (
@@ -49,12 +65,16 @@ function ModalPost({open, setOpen}) {
                 </ListItem>
             </List>
             <TextField
-                    id="standard-multiline-static"
+                    id="tweet"
+                    name="tweet"
                     label="What is on your mind?"
                     variant="standard"
                     fullWidth 
                     multiline
                     rows={3}
+                    onChange={e => {
+                        setTweetPost(e.target.value)
+                      }}
                     />
             <Stack direction="row" spacing={3} sx={{marginTop: 1}}>
                 <AddPhotoAlternateIcon sx={{color: 'red'}} />
