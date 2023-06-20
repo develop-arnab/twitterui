@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import { Button, Avatar, Modal, TextField, Typography, List, ListItem, ListItemAvatar, ListItemText, ButtonGroup } from '@mui/material'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import cookie from "react-cookie";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -27,6 +28,19 @@ const style = {
 
 function ModalPost({open, setOpen}) {
     const baseURL = process.env.REACT_APP_BASE_URL;
+    const [token, setToken] = useState("");
+    useEffect(() => {
+      const loggedInUser = localStorage.getItem("user");
+     
+      if (loggedInUser) {
+        console.log("USER ", loggedInUser);
+        setToken(loggedInUser);
+      }
+    }, []);
+  
+    useEffect(() => {
+      console.log("TOKEN Modal", token);
+    }, [token]);
     const navigate = useNavigate();
     const[tweetPost, setTweetPost] = useState("")
 
@@ -34,8 +48,15 @@ function ModalPost({open, setOpen}) {
         const body = {
             tweet : tweetPost,
           };
+          
+    const options = {
+          headers :{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
           try {
-            const response = await axios.post(baseURL + "/server/auth/tweet", body);
+            const response = await axios.post(baseURL + "/server/auth/tweet",body , options );
             console.log("on Login ", response);
             if(response?.data?.status ===  "ok"){
               localStorage.setItem('user', response.data.refreshToken)
