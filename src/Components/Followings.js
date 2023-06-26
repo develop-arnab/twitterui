@@ -6,7 +6,10 @@ function Followings({ followings }) {
     // <AvatarGroup max={4} total={5}>
     <>
       {followings?.map((following) => {
-        return <Avatar>{following.charAt(0).toUpperCase()}</Avatar>;
+        return (
+          <AvatarGroup style={{}} max={4} total={followings.length}>
+        <Avatar>{following.charAt(0).toUpperCase()}</Avatar>);
+        </AvatarGroup>)
       })}
       </>
     // </AvatarGroup>

@@ -15,7 +15,7 @@ function Rightbar({users,followings}) {
      <Box position="fixed">
         <Typography variant="h6" fontWeight={200}>Following</Typography>
         <Followings followings={followings}/>
-        <WhoToFollow users = {users}/>
+        <WhoToFollow followings={followings} users = {users}/>
      </Box>
     </Box>
   )
